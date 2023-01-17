@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import { Routes, Route, Link, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { Home } from './Home';
 import { Phone } from './Phone';
 
@@ -27,8 +27,8 @@ function ProtectedRoute( {children} ){
 //----------------------------------------------------------------
 // fake user login-find and redirect to login page
 // Normal function
-function checkAuth(data) {
-  if (data.status == 401 ) {
+export function checkAuth(data) {
+  if (data.status === 401 ) {
     console.log("unauthorized");
     throw Error("unauthorized");
   } else {
@@ -36,7 +36,7 @@ function checkAuth(data) {
   }
 }
 
-function logout(navigate){
+export function logout(){
   localStorage.removeItem("token");
   window.location.href = "/";
 }
@@ -44,8 +44,7 @@ function logout(navigate){
 function PhoneList(){
   const [mobiles, setMobiles] = useState([]);
 
-  useEffect(() => {
-    //Protected API
+  const getMobiles = () => {
     fetch("http://localhost:5000/mobiles", {
       method: "GET",
       headers: {
@@ -55,12 +54,14 @@ function PhoneList(){
     .then((data) => checkAuth(data))
     .then((mbs) => setMobiles(mbs))
     .catch((err) => logout());
-  }, []);
+  }; 
+
+  useEffect(() => getMobiles(), []);
  
   return(
     <div className='phone-list-container'>
        {mobiles.map((mb, index) => (
-        <Phone key={index} mobile={mb} />
+        <Phone key={index} mobile={mb} getMobiles={getMobiles} />
        ))};
     </div>
   );
