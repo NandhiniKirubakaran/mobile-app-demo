@@ -37,6 +37,7 @@ function LoginForm(){
         const result = await data.json();
         console.log("✅ Success", result);
         localStorage.setItem("token", result.token);
+        localStorage.setItem("roleId", result.roleId);
         navigate("/mobiles");
       };
 //---------------------------------------------------------------
