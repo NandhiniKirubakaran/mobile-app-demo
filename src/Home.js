@@ -1,6 +1,8 @@
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useFormik } from 'formik';
+import { useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export function Home() {
   return (
@@ -13,21 +15,32 @@ export function Home() {
 
 
 function LoginForm(){
+  const [formState, setFormState] = useState("success");
+  const navigate = useNavigate();
   const { handleChange, values, handleSubmit } = useFormik({
     initialValues : { username: "Nandhini", password: "123"},
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log(values);
 
-      fetch("http://localhost:5000/user/Login", {
-        method: 'POST',
+    const data = await fetch("http://localhost:5000/user/Login", {
+        method: "POST",
         headers: {
           "Content-type": "application/json",
         },
         body: JSON.stringify(values),
-      }) 
-      .then((data) => data.json)
-      .then((result) => console.log(result));
-    },
+      });
+//-------------------------------------------------------------
+      if (data.status == 401){
+        console.log("❌ Error");
+        setFormState("error");
+      } else {
+        const result = await data.json();
+        console.log("✅ Success", result);
+        localStorage.setItem("token", result.token);
+        navigate("/mobiles");
+      };
+//---------------------------------------------------------------
+    },  
   });
   return(
     <form onSubmit={handleSubmit} className='login-form'>
@@ -44,7 +57,9 @@ function LoginForm(){
       value={values.password}
       name= "password"
       />
-      <Button type="submit" variant="contained">Submit</Button>
+      <Button color={formState} type="submit" variant="contained">
+        { formState == 'error' ? 'Retry' : "Submit" }
+      </Button>
     </form>
   );
 }
