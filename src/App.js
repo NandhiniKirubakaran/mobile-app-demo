@@ -3,6 +3,7 @@ import './App.css';
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Home } from './Home';
 import { Phone } from './Phone';
+import { API } from './global';
 
 
 
@@ -45,7 +46,7 @@ function PhoneList(){
   const [mobiles, setMobiles] = useState([]);
 
   const getMobiles = () => {
-    fetch("http://localhost:5000/mobiles", {
+    fetch(`${API}`, {
       method: "GET",
       headers: {
         "x-auth-token": localStorage.getItem("token"),

@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { API } from './global';
 
 export function Home() {
   return (
@@ -18,11 +19,11 @@ function LoginForm(){
   const [formState, setFormState] = useState("success");
   const navigate = useNavigate();
   const { handleChange, values, handleSubmit } = useFormik({
-    initialValues : { username: "Nandhini", password: "123"},
+    initialValues : { username: "mobileapp", password: "123"},
     onSubmit: async (values) => {
       console.log(values);
 
-    const data = await fetch("http://localhost:5000/user/Login", {
+    const data = await fetch(`${API}`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",
