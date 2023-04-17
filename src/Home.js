@@ -26,7 +26,7 @@ function LoginForm(){
     const data = await fetch(`${API}`, {
         method: "POST",
         headers: {
-          "Content-type": "application/json",
+          "Content-type": "application/json", 
         },
         body: JSON.stringify(values),
       });
@@ -35,7 +35,7 @@ function LoginForm(){
         console.log("❌ Error");
         setFormState("error");
       } else {
-        const result = await data.json();
+        const result =  data.json();
         console.log("✅ Success", result);
         localStorage.setItem("token", result.token);
         localStorage.setItem("roleId", result.roleId);
@@ -55,7 +55,7 @@ function LoginForm(){
       />
       <TextField  label="Password" 
       variant="outlined" 
-      onChange={handleChange} 
+      onChange={handleChange}   
       value={values.password}
       name= "password"
       />
